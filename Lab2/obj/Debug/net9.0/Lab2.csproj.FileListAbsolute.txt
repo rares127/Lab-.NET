@@ -1,0 +1,14 @@
+/Users/rares/Documents/punctNET/Lab2/Lab2/bin/Debug/net9.0/Lab2
+/Users/rares/Documents/punctNET/Lab2/Lab2/bin/Debug/net9.0/Lab2.deps.json
+/Users/rares/Documents/punctNET/Lab2/Lab2/bin/Debug/net9.0/Lab2.runtimeconfig.json
+/Users/rares/Documents/punctNET/Lab2/Lab2/bin/Debug/net9.0/Lab2.dll
+/Users/rares/Documents/punctNET/Lab2/Lab2/bin/Debug/net9.0/Lab2.pdb
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/Lab2.GeneratedMSBuildEditorConfig.editorconfig
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/Lab2.AssemblyInfoInputs.cache
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/Lab2.AssemblyInfo.cs
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/Lab2.csproj.CoreCompileInputs.cache
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/Lab2.dll
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/refint/Lab2.dll
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/Lab2.pdb
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/Lab2.genruntimeconfig.cache
+/Users/rares/Documents/punctNET/Lab2/Lab2/obj/Debug/net9.0/ref/Lab2.dll
