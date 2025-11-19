@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using ProductManagement.Common.Logging;
@@ -11,7 +12,8 @@ public class CreateProductHandler(
     ProductManagementContext context,
     IMemoryCache cache,
     ILogger<CreateProductHandler> logger,
-    CreateProductProfileValidator validator)
+    CreateProductProfileValidator validator,
+    IMapper mapper)
 {
     private const string CacheKeyAllProducts = "all_products";
 
@@ -99,17 +101,8 @@ public class CreateProductHandler(
 
                 validationStopwatch.Stop();
 
-                // Create product entity
-                var product = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    Name = request.Name ?? string.Empty,
-                    Brand = request.Brand ?? string.Empty,
-                    SKU = request.SKU ?? string.Empty,
-                    Category = request.Category,
-                    Price = request.Price,
-                    CreatedAt = DateTime.UtcNow
-                };
+                // Create product entity using AutoMapper
+                var product = mapper.Map<Product>(request);
 
                 // Database operations
                 databaseStopwatch.Start();
@@ -149,7 +142,7 @@ public class CreateProductHandler(
 
                 logger.LogProductCreationMetrics(successMetrics);
 
-                var dto = new ProductProfileDto(product);
+                var dto = mapper.Map<ProductProfileDto>(product);
                 return Results.Created($"/products/{product.Id}", dto);
             }
             catch (Exception ex)

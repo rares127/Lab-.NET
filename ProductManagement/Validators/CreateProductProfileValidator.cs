@@ -69,6 +69,41 @@ public class CreateProductProfileValidator : AbstractValidator<CreateProductProf
 
         // Business rules (async)
         RuleFor(x => x).MustAsync(PassBusinessRules).WithMessage("One or more business rules failed.");
+
+        // Conditional validation for Electronics
+        When(x => x.Category == ProductCategory.Electronics, () =>
+        {
+            RuleFor(x => x.Price)
+                .GreaterThanOrEqualTo(50m).WithMessage("Electronics products must have a minimum price of $50.00.");
+            
+            RuleFor(x => x.Name)
+                .Must(ContainTechnologyKeywords).WithMessage("Electronics product name must contain technology-related keywords.");
+            
+            RuleFor(x => x.ReleaseDate)
+                .Must(d => d >= DateTime.UtcNow.AddYears(-5)).WithMessage("Electronics products must be released within the last 5 years.");
+        });
+
+        // Conditional validation for Home
+        When(x => x.Category == ProductCategory.Home, () =>
+        {
+            RuleFor(x => x.Price)
+                .LessThanOrEqualTo(200m).WithMessage("Home products must have a maximum price of $200.00.");
+            
+            RuleFor(x => x.Name)
+                .Must(BeAppropriateForHome).WithMessage("Home product name contains restricted words.");
+        });
+
+        // Conditional validation for Clothing
+        When(x => x.Category == ProductCategory.Clothing, () =>
+        {
+            RuleFor(x => x.Brand)
+                .MinimumLength(3).WithMessage("Clothing products require a brand name of at least 3 characters.");
+        });
+
+        // Cross-field validation
+        RuleFor(x => x)
+            .Must(x => x.Price <= 100m || x.StockQuantity <= 20)
+            .WithMessage("Expensive products (>$100) must have limited stock (≤20 units).");
     }
 
     private bool BeValidName(string name)
@@ -180,6 +215,40 @@ public class CreateProductProfileValidator : AbstractValidator<CreateProductProf
 
         // All rules passed
         _logger.LogInformation("Business rules passed for product Name='{Name}', SKU='{SKU}'", request.Name, request.SKU);
+        return true;
+    }
+
+    private bool ContainTechnologyKeywords(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var techKeywords = new[] 
+        { 
+            "phone", "laptop", "computer", "tablet", "monitor", "keyboard", "mouse", 
+            "headphones", "speaker", "camera", "tv", "smart", "wireless", "bluetooth",
+            "usb", "gaming", "processor", "cpu", "gpu", "ssd", "hdd", "ram", "memory",
+            "router", "modem", "wifi", "network", "tech", "digital", "electronic"
+        };
+
+        var lowerName = name.ToLowerInvariant();
+        return techKeywords.Any(keyword => lowerName.Contains(keyword));
+    }
+
+    private bool BeAppropriateForHome(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return true;
+
+        var lowerName = name.ToLowerInvariant();
+        foreach (var restrictedWord in HomeRestrictedWords)
+        {
+            if (lowerName.Contains(restrictedWord))
+            {
+                _logger.LogWarning("Home product name contains restricted word: '{Word}'", restrictedWord);
+                return false;
+            }
+        }
         return true;
     }
 }
